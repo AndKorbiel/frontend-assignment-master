@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import SingleArticle from "./components/SingleArticle";
 import SortingButton from "./components/SortingButton";
 import Filters from "./components/Filters";
+import moment from "moment";
 
 const App = () => {
     const [articles, setArticles] = useState([]);
@@ -10,6 +11,7 @@ const App = () => {
         {label: 'fashion', category: 'fashion', checked: true},
         {label: 'sports', category: 'sport', checked: true}
     ])
+    const [sortingOrderFromLatest, setSortingOrderFromLatest] = useState(true)
 
     const formatArticlesData = data => {
         let formatted = [];
@@ -49,6 +51,20 @@ const App = () => {
         updateFilterOptions(currentOptionsState);
     }
 
+    const setSorting = () => {
+        const articlesList = articles.map(el => el);
+        articlesList.sort((a,b) => {
+            return moment(a.date, "DD. MMM. YYYY", "nb") - moment(b.date, "DD. MMM. YYYY", "nb")
+        })
+
+        if (sortingOrderFromLatest) {
+            articlesList.reverse()
+        }
+
+        setSortingOrderFromLatest(!sortingOrderFromLatest);
+        setArticles(articlesList);
+    }
+
     useEffect(() => {
         getArticlesData();
     }, [])
@@ -56,7 +72,7 @@ const App = () => {
     return (
         <div>
             <Filters options={filterOptions} action={handleChangeFilter} />
-            <SortingButton />
+            <SortingButton action={setSorting} />
             {articles && articles.length > 0
                 ? articles.map(article => checkIsArticleCategorySelected(article))
                 : <p>Sorry, error while displaying data. Please refresh the page</p>

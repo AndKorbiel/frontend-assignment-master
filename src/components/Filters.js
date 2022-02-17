@@ -1,16 +1,30 @@
 import React from "react";
+// material-ui
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
 
 const Filters = props => {
     return (
-        <div>
-            <p>Data sources</p>
-            {props.options && props.options.map(option => (
-                <div key={option.label}>
-                    <input type="checkbox" id={option.label} name={option.label} checked={option.checked} onChange={() => props.action(option)} />
-                    <label htmlFor={option.label}>{option.label}</label>
-                </div>
-            ))}
-        </div>
+        <FormGroup className="filters-box">
+            <Typography variant="body1" className="action-heading">
+                Data sources
+            </Typography>
+            <Stack className="cb-wrapper">
+                {props.options && props.options.map(option => (
+                    <FormControlLabel
+                        key={option.label}
+                        control={
+                            <Checkbox
+                                checked={option.checked}
+                                onChange={() => props.action(option)}
+                            />}
+                        label={option.label} />
+                ))}
+            </Stack>
+        </FormGroup>
     )
 }
 

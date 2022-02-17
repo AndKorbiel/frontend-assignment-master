@@ -4,6 +4,12 @@ import SingleArticle from "./components/SingleArticle";
 import SortingButton from "./components/SortingButton";
 import Filters from "./components/Filters";
 import moment from "moment";
+import './styles/app.scss';
+
+// material-ui
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import {Alert} from "@mui/material";
 
 const App = () => {
     const [articles, setArticles] = useState([]);
@@ -11,7 +17,8 @@ const App = () => {
         {label: 'fashion', category: 'fashion', checked: true},
         {label: 'sports', category: 'sport', checked: true}
     ])
-    const [sortingOrderFromLatest, setSortingOrderFromLatest] = useState(true)
+    const [sortingOrderFromLatest, setSortingOrderFromLatest] = useState(true);
+    const [dataLoadingError, setDataLoadingError] = useState(false);
 
     const formatArticlesData = data => {
         let formatted = [];
@@ -28,7 +35,7 @@ const App = () => {
         ])
             .then(res => Promise.all(res.map(r => r.json())))
             .then(data => formatArticlesData(data))
-            .catch(error => console.log(error))
+            .catch(error => setDataLoadingError(error))
     }
 
     const isArticleCategorySelected = prop => {
@@ -70,14 +77,23 @@ const App = () => {
     }, [])
 
     return (
-        <div>
-            <Filters options={filterOptions} action={handleChangeFilter} />
-            <SortingButton action={setSorting} />
-            {articles && articles.length > 0
-                ? articles.map(article => checkIsArticleCategorySelected(article))
-                : <p>Sorry, error while displaying data. Please refresh the page</p>
-            }
-        </div>
+        <Container maxWidth="lg" className="App">
+            <Grid container spacing={2}>
+                <Grid item sm={12} md={2} className="sidebar">
+                    <Filters options={filterOptions} action={handleChangeFilter} />
+                </Grid>
+                <Grid item sm={12} md={10}>
+                    <Grid item xs={12} sx={{ justifyContent: 'end', display: 'flex', mb: '1em'}}  className="sorting-button-box">
+                        <SortingButton action={setSorting} />
+                    </Grid>
+                    {articles && articles.length > 0
+                        ? articles.map(article => checkIsArticleCategorySelected(article))
+                        : ''
+                    }
+                    {dataLoadingError && <Alert severity="error">Sorry, an error occurred while displaying the data. Please refresh the page.</Alert>}
+                </Grid>
+            </Grid>
+        </Container>
     )
 }
 

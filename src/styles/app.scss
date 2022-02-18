@@ -1,0 +1,38 @@
+.App {
+  padding-top: 40px;
+  position: relative;
+
+  .MuiTypography-root.action-heading {
+    text-decoration: underline;
+    line-height: 2.5em;
+  }
+
+  .filters-box {
+    margin-top: 40px;
+  }
+
+  .MuiToggleButton-root.custom-toggle {
+    border: 0;
+    padding: 0;
+    width: 16px;
+    height: 20px;
+    margin-left: 15px;
+  }
+
+  @media screen and (max-width: 899px) {
+    .filters-box {
+      margin-top: 0;
+    }
+
+    .css-nen11g-MuiStack-root.cb-wrapper {
+      flex-direction: initial;
+    }
+
+    .sorting-button-box {
+      position: absolute;
+      right: 24px;
+      top: 40px;
+    }
+  }
+}
+
